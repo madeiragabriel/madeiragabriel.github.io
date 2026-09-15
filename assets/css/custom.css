@@ -5,9 +5,9 @@
 
 /* 1. Palette tokens — greyish olive green family on a cool off-white ground */
 :root {
-  --color-bg: #f7f7f2;
-  --color-surface: #eeeee6;
-  --color-surface-2: #e3e4d9;
+  --color-bg: #ffffff;
+  --color-surface: #f4f4ef;
+  --color-surface-2: #e9eae1;
   --color-text: #2b2d26;
   --color-text-muted: #62665a;
   --color-text-soft: #858a7c;
@@ -16,7 +16,7 @@
   --color-institution: #4a5239;   /* deep olive: active tab underline, hovers, rules */
   --color-link: #5b6449;
   --color-link-hover: #3f4631;
-  --color-border: #dcded3;
+  --color-border: #e1e3d9;
   --color-border-strong: #c3c6b6;
   --color-focus: #c9b86a;
   --color-sage: #7f8a6a;

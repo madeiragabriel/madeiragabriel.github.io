@@ -64,7 +64,7 @@ Tab ids: `all`, `articles`, `chapters`, `working-papers`, `in-progress`, `presen
 
 ## Styling
 
-`assets/css/custom.css` is the only project stylesheet. Palette tokens are CSS custom properties: a greyish olive green family (cool off-white ground, dark olive-charcoal text, olive accent for buttons and active states, deeper olive for hovers and rules; the favicon uses the same accent). Light mode is forced; the Blox theme toggle is hidden. Fonts are the native system stack. Breakpoints: hero stacks at 640px, filter sidebar stacks at 860px, hamburger below 1024px. `prefers-reduced-motion` strips transitions.
+`assets/css/custom.css` is the only project stylesheet. Palette tokens are CSS custom properties: a greyish olive green family (pure white ground, dark olive-charcoal text, olive accent for buttons and active states, deeper olive for hovers and rules; the favicon uses the same accent). Light mode is forced; the Blox theme toggle is hidden. Fonts are the native system stack. Breakpoints: hero stacks at 640px, filter sidebar stacks at 860px, hamburger below 1024px. `prefers-reduced-motion` strips transitions.
 
 ## URL safety
 
