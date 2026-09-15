@@ -70,7 +70,7 @@ Tags drive two things: the research-area accordions on the homepage and the "Res
 
 The People page is generated automatically from the `authors:` field of every publication: every name except yours becomes a line, alphabetized by surname. You never edit the page itself.
 
-Links are looked up in `data/coauthors.json`, keyed by the exact name string used in the publications. **The links in that file were found by web search during the initial build and are best guesses. Please check every one, correct any that point at the wrong person, and add links for the names that are currently `null`** (Lucas Maia, Marília Vital, Karen Rizzato, Gabriela Peixoto, Yury Machado, Maria Luiza Barretos). Names with `null` appear without a link. Preferred order: personal website, then university page, then LinkedIn.
+Links are looked up in `data/coauthors.json`, keyed by the exact name string used in the publications. **The links in that file were found by web search during the initial build and are best guesses. Please check every one, correct any that point at the wrong person, and add links for the names that are currently `null`** (Lucas Maia, Marília Vital, Karen Rizzato, Gabriela Peixoto, Yury Machado, Maria Luiza Barretos). Names with `null` appear without a link. The page is not in the menu, but it exists at `/authors/`; add a `People` entry under `menu.main` in `hugo.yaml` to show it. Preferred order: personal website, then university page, then LinkedIn.
 
 If the same person is spelled two ways across papers (for example "Sergio Simoni" and "Sérgio Simoni Júnior"), pick one spelling and use it everywhere; otherwise they appear twice.
 

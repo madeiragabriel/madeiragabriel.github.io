@@ -88,5 +88,5 @@ Project-site subpaths are no longer in play (this is a user site at the domain r
 - No portrait yet (monogram placeholder).
 - Six co-authors have no verified link; all others were guessed by search and need review.
 - Working papers carry no abstracts or PDFs yet; add `abstract:` and `links:` when available.
-- "Green Rhetoric, Conservative Votes" is listed as a working paper per the C.V.; if it has been accepted (Environmental Politics), update its front matter.
+- "Green Rhetoric, Anti-Environmental Voting" is now a journal article (Environmental Politics, online first); add volume, issue, pages and abstract when available and confirm the author list.
 - `content/talk/` and `content/software/` sections are empty and hidden from the menu.

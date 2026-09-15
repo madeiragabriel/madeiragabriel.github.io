@@ -3,26 +3,26 @@
    All site-level overrides live here. Blox/Tailwind provide the base.
    ========================================================================== */
 
-/* 1. Palette tokens — warm earth tones; FGV navy desaturated as the institution accent */
+/* 1. Palette tokens — greyish olive green family on a cool off-white ground */
 :root {
-  --color-bg: #fbf9f5;
-  --color-surface: #f4efe7;
-  --color-surface-2: #ece5da;
-  --color-text: #2d2926;
-  --color-text-muted: #6b6560;
-  --color-text-soft: #8a8580;
-  --color-accent: #5c7a8a;        /* slate blue: buttons, active states */
-  --color-accent-dark: #47616f;
-  --color-institution: #26406b;   /* FGV navy, used sparingly */
-  --color-link: #4f6b7a;
-  --color-link-hover: #26406b;
-  --color-border: #e2ddd5;
-  --color-border-strong: #cfc7bb;
-  --color-focus: #d4a96a;
-  --color-sage: #7a8c6e;
-  --color-clay: #b5704d;
-  --color-footer-bg: #2d2926;
-  --color-footer-text: #e8e0d5;
+  --color-bg: #f7f7f2;
+  --color-surface: #eeeee6;
+  --color-surface-2: #e3e4d9;
+  --color-text: #2b2d26;
+  --color-text-muted: #62665a;
+  --color-text-soft: #858a7c;
+  --color-accent: #6b7458;        /* greyish olive: buttons, active states, monogram */
+  --color-accent-dark: #555d45;
+  --color-institution: #4a5239;   /* deep olive: active tab underline, hovers, rules */
+  --color-link: #5b6449;
+  --color-link-hover: #3f4631;
+  --color-border: #dcded3;
+  --color-border-strong: #c3c6b6;
+  --color-focus: #c9b86a;
+  --color-sage: #7f8a6a;
+  --color-clay: #9a7e5a;
+  --color-footer-bg: #2f3329;
+  --color-footer-text: #e3e4d9;
   --radius: 6px;
   --gutter: 1.25rem;
   --content-max: 1200px;
@@ -49,7 +49,7 @@ body.gm-body {
 .page-body { margin: 0 !important; }
 
 /* 2. Links */
-a { color: var(--color-link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; text-decoration-color: rgba(79,107,122,.45); }
+a { color: var(--color-link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; text-decoration-color: rgba(91,100,73,.45); }
 a:hover { color: var(--color-link-hover); text-decoration-color: currentColor; }
 
 /* 8. Accessibility */
@@ -235,7 +235,7 @@ a:hover { color: var(--color-link-hover); text-decoration-color: currentColor; }
 .gm-abstract p { max-width: 70ch; }
 .gm-tags { font-size: .88rem; color: var(--color-text-muted); margin: 1.25rem 0; }
 .gm-banner { padding: .6rem .9rem; border-radius: var(--radius); font-size: .92rem; margin: 0 0 1rem; border: 1px solid; }
-.gm-banner-dataset { background: #eef1ea; border-color: var(--color-sage); color: var(--color-text); }
+.gm-banner-dataset { background: #e9ede2; border-color: var(--color-sage); color: var(--color-text); }
 
 /* 13. See Also */
 .gk-see-also { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--color-border); clear: both; }
@@ -262,13 +262,13 @@ a:hover { color: var(--color-link-hover); text-decoration-color: currentColor; }
 .gm-footer-right { flex: 0 1 auto; margin-left: auto; }
 @media (min-width: 768px) { .gm-footer-inner { padding: 2.25rem 2rem; } }
 .gm-footer-name { font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
-.gm-footer-role { color: #bfb6aa; margin: .2rem 0 .8rem; }
+.gm-footer-role { color: #b9bdae; margin: .2rem 0 .8rem; }
 .gm-footer-nav { display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
-.gm-footer a { color: var(--color-footer-text); text-decoration-color: rgba(232,224,213,.4); }
+.gm-footer a { color: var(--color-footer-text); text-decoration-color: rgba(227,228,217,.4); }
 .gm-footer a:hover { color: #fff; }
 .gm-footer-right { text-align: right; display: flex; flex-direction: column; justify-content: flex-end; gap: .35rem; }
-.gm-footer-meta { color: #bfb6aa; }
-.gm-footer-credit { font-size: .78rem; color: #a59c90; }
+.gm-footer-meta { color: #b9bdae; }
+.gm-footer-credit { font-size: .78rem; color: #9fa494; }
 @media (max-width: 640px) { .gm-footer-right { text-align: left; } }
 
 /* 5. Card hover + reduced motion */
