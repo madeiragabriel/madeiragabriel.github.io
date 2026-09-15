@@ -1,0 +1,38 @@
+{{/* Navbar: brand (owner's name) left, links right, search icon only, hamburger on mobile. */}}
+<header id="site-header" class="gm-header">
+  <nav class="gm-navbar" aria-label="Main navigation">
+    <a class="gm-brand" href="{{ site.Home.RelPermalink }}" title="{{ site.Title }}">{{ site.Params.header.navbar.logo.text | default site.Title }}</a>
+
+    <input id="nav-toggle" type="checkbox" class="gm-nav-toggle-input" aria-hidden="true" />
+    <div class="gm-nav-right">
+      {{ $show_search := site.Params.header.navbar.show_search | default false }}
+      {{ if $show_search }}
+      <button type="button" class="gm-search-btn" aria-label="{{ i18n "search" }}" title="{{ i18n "search" }} (Ctrl+K)" data-search-toggle>
+        <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+      </button>
+      {{ end }}
+      <label for="nav-toggle" class="gm-nav-toggle" aria-label="Open menu">
+        <svg class="gm-icon-open" viewBox="0 0 20 20" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+        <svg class="gm-icon-close" viewBox="0 0 20 20" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M4.3 4.3l1.4-1.4L10 7.2l4.3-4.3 1.4 1.4L11.4 8.6l4.3 4.3-1.4 1.4L10 10l-4.3 4.3-1.4-1.4 4.3-4.3z"/></svg>
+      </label>
+    </div>
+    <ul id="nav-menu" class="gm-nav-menu">
+        {{ $currentPage := . }}
+        {{ range site.Menus.main }}
+          {{ $url := "" }}
+          {{ if findRE `^/#` .URL }}
+            {{ $url = printf "%s%s" site.Home.RelPermalink (strings.TrimPrefix "/" .URL) }}
+          {{ else }}
+            {{ $url = .URL | relLangURL }}
+          {{ end }}
+          {{ $active := and (not (findRE `^/#` .URL)) (hasPrefix $currentPage.RelPermalink (.URL | relLangURL)) (ne .URL "/") }}
+          <li class="gm-nav-item">
+            <a class="gm-nav-link{{ if $active }} active{{ end }}" href="{{ $url }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+          </li>
+        {{ end }}
+    </ul>
+  </nav>
+</header>
+{{ if site.Params.header.navbar.show_search }}
+  {{- partial "components/search-modal.html" . -}}
+{{ end }}

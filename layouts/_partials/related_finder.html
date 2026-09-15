@@ -1,0 +1,127 @@
+{{/*
+  related_finder.html — automatic "See also" cross-linking, computed at build time.
+  Priority 1: explicit front matter (related_papers/talks/software/datasets, related_paper, related_dataset).
+  Priority 1b: see_also list of {url,title} or {section,slug}.
+  Priority 1c: dataverse_url (or a Harvard Dataverse URL found in the abstract).
+  Priority 2/3: scoring — +2 per shared title token, +1 per shared co-author, +2 per shared tag.
+  Threshold 4 (relaxed to 2 when fewer than 3 explicit picks). Cap 8, sorted by score then year.
+*/}}
+{{- $page := . -}}
+{{- $owner := site.Data.site.name -}}
+{{- $stop := slice "a" "an" "and" "the" "of" "for" "in" "on" "to" "with" "by" "at" "as" "is" "are" "be" "or" "from" "into" "using" "via" "new" "not" "no" "it" "its" "we" "our" "their" "you" "your" "this" "that" "these" "those" "but" "if" "than" "then" "so" "can" "will" "would" "could" "should" "may" "might" "also" "more" "most" "some" "all" "any" "each" "every" "who" "whom" "which" "what" "when" "where" "why" "how" "about" "between" "among" "through" "over" "under" "after" "before" "upon" "across" "per" "vs" "de" "la" "les" "et" "du" "e" "o" "os" "as" "um" "uma" "do" "da" "dos" "das" "em" "para" "com" "y" "el" "los" "las" "en" "un" "una" "der" "die" "das" -}}
+
+{{- $candidates := where site.RegularPages "Section" "in" (slice "publication" "talk" "software") -}}
+{{- $candidates = where $candidates "Permalink" "ne" $page.Permalink -}}
+
+{{/* ---- helpers as inline computations ---- */}}
+{{- $myTokens := slice -}}
+{{- range (split (replaceRE `[^a-z0-9 ]` " " (lower $page.Title)) " ") -}}
+  {{- if and (ge (len .) 3) (not (in $stop .)) }}{{ $myTokens = $myTokens | append . }}{{ end -}}
+{{- end -}}
+{{- $myTokens = $myTokens | uniq -}}
+{{- $myAuthors := slice -}}
+{{- range ($page.Params.authors | default slice) }}{{ if ne . $owner }}{{ $myAuthors = $myAuthors | append (lower .) }}{{ end }}{{ end -}}
+{{- $myLast := slice -}}
+{{- range $myAuthors }}{{ $parts := split . " " }}{{ $myLast = $myLast | append (index $parts (sub (len $parts) 1)) }}{{ end -}}
+{{- $myTags := slice -}}
+{{- range ($page.Params.tags | default slice) }}{{ $myTags = $myTags | append (lower .) }}{{ end -}}
+
+{{/* ---- explicit picks ---- */}}
+{{- $explicitSlugs := slice -}}
+{{- with $page.Params.related_papers }}{{ range . }}{{ $explicitSlugs = $explicitSlugs | append (printf "publication/%s" .) }}{{ end }}{{ end -}}
+{{- with $page.Params.related_datasets }}{{ range . }}{{ $explicitSlugs = $explicitSlugs | append (printf "publication/%s" .) }}{{ end }}{{ end -}}
+{{- with $page.Params.related_talks }}{{ range . }}{{ $explicitSlugs = $explicitSlugs | append (printf "talk/%s" .) }}{{ end }}{{ end -}}
+{{- with $page.Params.related_software }}{{ range . }}{{ $explicitSlugs = $explicitSlugs | append (printf "software/%s" .) }}{{ end }}{{ end -}}
+{{- with $page.Params.related_paper }}{{ $explicitSlugs = $explicitSlugs | append (printf "publication/%s" .) }}{{ end -}}
+{{- with $page.Params.related_dataset }}{{ $explicitSlugs = $explicitSlugs | append (printf "publication/%s" .) }}{{ end -}}
+{{- with $page.Params.see_also }}{{ range . }}{{ $item := . }}{{ with .slug }}{{ $explicitSlugs = $explicitSlugs | append (printf "%s/%s" ($item.section | default "publication") .) }}{{ end }}{{ end }}{{ end -}}
+
+{{/* ---- special patterns ---- */}}
+{{- $isResponse := findRE `(?i)^(response to|reply to|comment on|rejoinder)` $page.Title -}}
+{{- $baseTitle := lower (replaceRE `(?i),?\s*(new edition|\d+(st|nd|rd|th) edition|second edition|third edition|revised edition)\s*$` "" $page.Title) -}}
+{{- $isBook := in ($page.Params.publication_types | default slice) "book" -}}
+
+{{/* ---- score every candidate ---- */}}
+{{- $scored := slice -}}
+{{- range $c := $candidates -}}
+  {{- $key := printf "%s/%s" $c.Section (path.Base (path.Dir $c.File.Path)) -}}
+  {{- $score := 0 -}}
+  {{- $pinned := false -}}
+  {{- if in $explicitSlugs $key }}{{ $score = 1000 }}{{ end -}}
+  {{- $cTokens := slice -}}
+  {{- range (split (replaceRE `[^a-z0-9 ]` " " (lower $c.Title)) " ") -}}
+    {{- if and (ge (len .) 3) (not (in $stop .)) }}{{ $cTokens = $cTokens | append . }}{{ end -}}
+  {{- end -}}
+  {{- $cTokens = $cTokens | uniq -}}
+  {{- $overlap := 0 -}}
+  {{- range $myTokens }}{{ if in $cTokens . }}{{ $overlap = add $overlap 1 }}{{ end }}{{ end -}}
+  {{- $score = add $score (mul 2 $overlap) -}}
+  {{- range ($c.Params.authors | default slice) -}}
+    {{- $a := lower . -}}
+    {{- if ne . $owner -}}
+      {{- $parts := split $a " " }}{{ $last := index $parts (sub (len $parts) 1) -}}
+      {{- if or (in $myAuthors $a) (in $myLast $last) }}{{ $score = add $score 1 }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- range ($c.Params.tags | default slice) }}{{ if in $myTags (lower .) }}{{ $score = add $score 2 }}{{ end }}{{ end -}}
+  {{- if and $isResponse (ge $overlap 2) }}{{ $pinned = true }}{{ $score = add $score 500 }}{{ end -}}
+  {{- if and $isBook (in ($c.Params.publication_types | default slice) "book") -}}
+    {{- $cBase := lower (replaceRE `(?i),?\s*(new edition|\d+(st|nd|rd|th) edition|second edition|third edition|revised edition)\s*$` "" $c.Title) -}}
+    {{- if eq $cBase $baseTitle }}{{ $score = add $score 500 }}{{ end -}}
+  {{- end -}}
+  {{- $scored = $scored | append (dict "page" $c "score" $score "year" $c.Date.Year "key" $key "pinned" $pinned) -}}
+{{- end -}}
+
+{{- $explicitCount := len $explicitSlugs -}}
+{{- $threshold := cond (lt $explicitCount 3) 2 4 -}}
+{{- $picked := slice -}}
+{{- $seenTitles := slice -}}
+{{- $myNorm := replaceRE `[^a-z0-9]` "" (lower $page.Title) -}}
+{{- $seenTitles = $seenTitles | append $myNorm -}}
+{{- range sort (sort $scored "year" "desc") "score" "desc" -}}
+  {{- if ge .score $threshold -}}
+    {{- $norm := replaceRE `[^a-z0-9]` "" (lower .page.Title) -}}
+    {{- if and (not (in $seenTitles $norm)) (lt (len $picked) 8) -}}
+      {{- $picked = $picked | append . -}}
+      {{- $seenTitles = $seenTitles | append $norm -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* ---- external see_also links and dataverse ---- */}}
+{{- $external := slice -}}
+{{- with $page.Params.see_also }}{{ range . }}{{ $item := . }}{{ with .url }}{{ $external = $external | append (dict "url" . "title" ($item.title | default .)) }}{{ end }}{{ end }}{{ end -}}
+{{- $dataverse := $page.Params.dataverse_url | default "" -}}
+{{- if not $dataverse -}}
+  {{- with $page.Params.abstract }}{{ with index (findRE `https?://(dataverse\.harvard\.edu|doi\.org/10\.7910)[^\s"<)]*` .) 0 }}{{ $dataverse = . }}{{ end }}{{ end -}}
+{{- end -}}
+
+{{- if or $picked $external $dataverse -}}
+<section class="gk-see-also" data-pagefind-ignore aria-labelledby="see-also-heading">
+  <h2 id="see-also-heading">{{ i18n "see_also" }}</h2>
+  <ul>
+    {{- with $dataverse }}
+    <li><span class="gk-kind gk-kind-dataset">[{{ i18n "kind_dataset" }}]</span> <a href="{{ . }}" target="_blank" rel="noopener">{{ $page.Params.dataverse_name | default (i18n "link_dataverse") }}</a></li>
+    {{- end }}
+    {{- range $picked }}
+      {{- $p := .page -}}
+      {{- $types := $p.Params.publication_types | default slice -}}
+      {{- $kind := "kind_paper" -}}{{- $cls := "paper" -}}
+      {{- if in $types "book" }}{{ $kind = "kind_book" }}{{ $cls = "book" }}
+      {{- else if or (in $types "book_chapter") (in $types "chapter") }}{{ $kind = "kind_chapter" }}{{ $cls = "paper" }}
+      {{- else if in $types "data" }}{{ $kind = "kind_dataset" }}{{ $cls = "dataset" }}
+      {{- else if in $types "software" }}{{ $kind = "kind_software" }}{{ $cls = "software" }}
+      {{- else if in $types "patent" }}{{ $kind = "kind_patent" }}{{ $cls = "paper" }}
+      {{- else if in $types "court_brief" }}{{ $kind = "kind_court_brief" }}{{ $cls = "paper" }}
+      {{- else if or (in $types "presentation") (eq $p.Section "talk") }}{{ $kind = "kind_presentation" }}{{ $cls = "presentation" }}
+      {{- else if eq $p.Section "software" }}{{ $kind = "kind_software" }}{{ $cls = "software" }}
+      {{- else if in $types "report" }}{{ $kind = "kind_working_paper" }}{{ $cls = "paper" }}
+      {{- end }}
+    <li><span class="gk-kind gk-kind-{{ $cls }}">[{{ i18n $kind }}]</span> <a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>{{ with $p.Date.Year }} <span class="gk-year">({{ . }})</span>{{ end }}</li>
+    {{- end }}
+    {{- range $external }}
+    <li><span class="gk-kind gk-kind-external">[Link]</span> <a href="{{ .url }}" target="_blank" rel="noopener">{{ .title }}</a></li>
+    {{- end }}
+  </ul>
+</section>
+{{- end -}}

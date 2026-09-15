@@ -1,0 +1,34 @@
+{
+  "areas": [
+    {
+      "id": "political-behavior",
+      "name": "Political Behavior and Public Opinion",
+      "description": "How voters judge the economy, assign blame, respond to partisan cues and form preferences over democracy itself.",
+      "tags": ["public opinion", "voting behavior", "economic perceptions", "polarization", "misinformation"]
+    },
+    {
+      "id": "labor-social-protection",
+      "name": "Political Economy of Labor and Social Protection",
+      "description": "The policy priorities of vulnerable workers, attitudes toward redistribution, and the electoral effects of social policy.",
+      "tags": ["labor markets", "social policy", "redistribution", "poverty"]
+    },
+    {
+      "id": "legislatures-policy",
+      "name": "Legislatures and Public Policy",
+      "description": "Legislative voting on environmental and trade policy, gender and committee assignments, and the politics of the bureaucracy.",
+      "tags": ["legislative politics", "environmental policy", "gender", "trade policy", "bureaucracy"]
+    },
+    {
+      "id": "civic-education",
+      "name": "Civic Education and Democratic Participation",
+      "description": "Civic education and civic audit programmes in public schools, youth political attitudes, and participation in local policy adoption.",
+      "tags": ["civic education", "youth", "participation", "early childhood policy", "public policy evaluation"]
+    },
+    {
+      "id": "international-political-economy",
+      "name": "International Political Economy",
+      "description": "Trade agreements, China's presence in Latin America, and how international shocks reach domestic politics.",
+      "tags": ["international political economy", "China", "trade policy", "Latin America"]
+    }
+  ]
+}

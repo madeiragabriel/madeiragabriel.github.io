@@ -1,0 +1,14 @@
+# Owner identity used by the homepage hero, llms.txt and structured data.
+name: "Gabriel Madeira"
+initials: "GM"
+role: "Researcher and Instructor"
+institution: "FGV EBAPE"
+institution_long: "Brazilian School of Public and Business Administration, Fundação Getulio Vargas"
+email: "gabriel.madeira@fgv.edu.br"
+# Homepage intro: 2–4 sentences, third person. Must differ from the Bio page text.
+intro: >-
+  Gabriel Madeira is a political scientist at FGV EBAPE in Rio de Janeiro. He studies political
+  behaviour and public opinion, the political economy of labour markets and social protection, and
+  how legislatures make environmental and social policy, mostly in Brazil and Latin America. He also
+  conducts applied policy research with Pensi Social and IPEA, and teaches statistics and quantitative
+  methods.

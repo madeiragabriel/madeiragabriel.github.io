@@ -1,0 +1,88 @@
+# Site configuration for gabrielmadeira.github.io
+# The public address: change baseURL (and static/llms.txt) if the repository is renamed
+# or a custom domain is added. It MUST end with a slash.
+baseURL: "https://madeiragabriel.github.io/"
+title: "Gabriel Madeira"
+languageCode: en-us
+defaultContentLanguage: en
+enableRobotsTXT: true
+timeZone: America/Sao_Paulo
+enableGitInfo: false
+disableKinds: ["taxonomy", "term"]
+ignoreLogs: ["sections-none-/"]
+
+module:
+  hugoVersion:
+    extended: true
+    min: "0.148.2"
+  imports:
+    - path: github.com/HugoBlox/hugo-blox-builder/modules/blox-tailwind
+
+outputs:
+  home: [HTML, RSS, JSON]
+  section: [HTML]
+  page: [HTML]
+
+taxonomies:
+  tag: tags
+  publication_type: publication_types
+
+permalinks:
+  publication: /publication/:contentbasename/
+  talk: /talk/:contentbasename/
+  software: /software/:contentbasename/
+
+params:
+  appearance:
+    color: stone
+    mode: light
+    font: native
+    font_size: L
+  header:
+    navbar:
+      enable: true
+      show_search: true
+      show_theme_chooser: false
+      fixed_to_top: true
+      logo:
+        text: "Gabriel Madeira"
+  features:
+    search:
+      provider: pagefind
+  extensions:
+    css:
+      - css/custom.css
+  # Options from the information form (Visibility, Credit & Staying in Touch).
+  mysite:
+    credit: true      # small "Created using GaryKing.org/mysite" line in the footer
+    discovery: true   # invisible generator meta tag + schema.org Person block
+  i_am_a_sponsor: true
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
+menu:
+  main:
+    - name: Bio & C.V.
+      url: /bio/
+      weight: 10
+    - name: Research
+      url: /publication/
+      weight: 20
+    - name: Research Areas
+      url: "/#research-areas"
+      weight: 30
+    - name: People
+      url: /authors/
+      weight: 40
+    - name: Teaching
+      url: /teaching/
+      weight: 50
+    - name: Resources
+      url: /resources/
+      weight: 60
+    - name: Contact
+      url: /contact/
+      weight: 70

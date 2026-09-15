@@ -1,0 +1,18 @@
+<!doctype html>
+{{- $language_code := site.LanguageCode | default "en-us" -}}
+<html lang="{{ $language_code }}" dir="ltr" data-wc-theme-default="light">
+  {{ partial "site_head" . }}
+  <body class="page-wrapper gm-body" id="top">
+    <a class="skip-link" href="#main-content">{{ i18n "skip_to_content" }}</a>
+    <div class="page-header sticky top-0 z-30">
+      {{ partial "components/headers/navbar.html" . }}
+    </div>
+    <main id="main-content" class="page-body gm-main" tabindex="-1" data-pagefind-body>
+      {{ block "main" . }}{{ end }}
+    </main>
+    <div class="page-footer">
+      {{ partial "site_footer" . }}
+    </div>
+    {{ partial "functions/get_hook" (dict "hook" "body-end" "context" .) }}
+  </body>
+</html>

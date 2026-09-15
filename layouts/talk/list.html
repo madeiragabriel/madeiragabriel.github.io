@@ -1,0 +1,7 @@
+{{ define "main" }}
+<div class="gm-container">
+  <nav class="gm-breadcrumb" data-pagefind-ignore aria-label="Breadcrumb"><a href="{{ site.Home.RelPermalink }}">{{ i18n "nav_home" }}</a> <span aria-hidden="true">/</span> <span aria-current="page">{{ .Title }}</span></nav>
+  <header class="gm-page-head"><h1>{{ .Title }}</h1>{{ with .Params.summary }}<p class="gm-lede">{{ . }}</p>{{ end }}{{ .Content }}</header>
+  <div class="pub-list">{{ range .Pages.ByDate.Reverse }}{{ partial "citation_row.html" (dict "page" .) }}{{ end }}</div>
+</div>
+{{ end }}

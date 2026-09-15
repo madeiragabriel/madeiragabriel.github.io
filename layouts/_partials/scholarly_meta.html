@@ -1,0 +1,33 @@
+{{/* Google Scholar citation_* tags and ScholarlyArticle JSON-LD, built from front matter. */}}
+{{- $types := .Params.publication_types | default slice -}}
+{{- $isBook := in $types "book" -}}
+{{- $isTalk := eq .Section "talk" -}}
+{{- $pdf := "" -}}{{- $doi := "" -}}
+{{- range .Params.links -}}
+  {{- $u := .url | default "" -}}
+  {{- if and (not $pdf) (hasSuffix (lower $u) ".pdf") -}}
+    {{- if hasPrefix $u "http" }}{{ $pdf = $u }}{{ else }}{{ $pdf = $u | absURL }}{{ end -}}
+  {{- end -}}
+  {{- if and (not $doi) (findRE `doi\.org/` $u) }}{{ $doi = replaceRE `^https?://(dx\.)?doi\.org/` "" $u }}{{ end -}}
+{{- end }}
+<meta name="citation_title" content="{{ .Title }}">
+{{- range .Params.authors }}
+<meta name="citation_author" content="{{ . }}">
+{{- end }}
+<meta name="citation_publication_date" content="{{ .Date.Format "2006/01/02" }}">
+{{- with .Params.publication }}
+<meta name="citation_journal_title" content="{{ . | plainify }}">
+{{- end }}
+{{- with $pdf }}
+<meta name="citation_pdf_url" content="{{ . }}">
+{{- end }}
+{{- with $doi }}
+<meta name="citation_doi" content="{{ . }}">
+{{- end }}
+{{- $authors := slice -}}
+{{- range .Params.authors }}{{ $authors = $authors | append (dict "@type" "Person" "name" .) }}{{ end -}}
+{{- $ld := dict "@context" "https://schema.org" "@type" (cond $isBook "Book" (cond $isTalk "CreativeWork" "ScholarlyArticle")) "headline" .Title "name" .Title "author" $authors "datePublished" (.Date.Format "2006-01-02") "url" .Permalink -}}
+{{- with .Params.abstract }}{{ $ld = merge $ld (dict "abstract" (. | plainify | htmlUnescape)) }}{{ end -}}
+{{- with .Params.publication }}{{ $ld = merge $ld (dict "isPartOf" (dict "@type" "Periodical" "name" (. | plainify))) }}{{ end -}}
+{{- with $doi }}{{ $ld = merge $ld (dict "identifier" . "sameAs" (printf "https://doi.org/%s" .)) }}{{ end -}}
+<script type="application/ld+json">{{ $ld | jsonify | safeJS }}</script>

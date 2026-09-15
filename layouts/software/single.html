@@ -1,0 +1,61 @@
+{{ define "main" }}
+{{- $owner := site.Data.site.name -}}
+{{- $authors := .Params.authors | default slice -}}
+{{- $n := len $authors -}}
+{{- $types := .Params.publication_types | default slice -}}
+{{- $isWP := in $types "report" -}}
+{{- $featured := partial "functions/get_featured_image.html" . -}}
+<div class="gm-container gm-narrow">
+  <nav class="gm-breadcrumb" data-pagefind-ignore aria-label="Breadcrumb"><a href="{{ site.Home.RelPermalink }}">{{ i18n "nav_home" }}</a> <span aria-hidden="true">/</span> <a href="{{ (site.GetPage "publication").RelPermalink }}">{{ (site.GetPage "publication").Title }}</a> <span aria-hidden="true">/</span> <span aria-current="page">{{ .Title }}</span></nav>
+  <article class="gm-pub">
+    <header class="gm-pub-head">
+      <h1>{{ .Title }}</h1>
+      <p class="gm-pub-authors">
+        {{- range $i, $a := $authors -}}
+          {{- if gt $i 0 }}{{ if eq $i (sub $n 1) }} and {{ else }}, {{ end }}{{ end -}}
+          {{- if eq $a $owner }}<span class="pub-owner">{{ $a }}</span>{{ else }}{{ $a }}{{ end -}}
+        {{- end -}}
+      </p>
+      <p class="gm-pub-meta">
+        {{- with .Params.publication }}<span class="pub-venue">{{ . | markdownify }}</span>{{ end -}}
+        {{- if and (not $isWP) (not .Params.hide_date) }} <span class="gm-dot">·</span> <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>{{ end -}}
+        {{- if .Params.forthcoming }} <span class="pub-flag">{{ i18n "forthcoming" }}</span>{{ end -}}
+      </p>
+      {{- with .Params.related_paper }}{{ with site.GetPage (printf "/publication/%s" .) }}
+      <p class="gm-banner gm-banner-dataset">{{ i18n "replication_data_for" }}: <a href="{{ .RelPermalink }}">{{ .Title }}</a></p>
+      {{ end }}{{ end -}}
+      {{- if .Params.links }}
+      <div class="gm-links">
+        {{- range .Params.links }}
+          {{- $u := .url -}}
+          {{- $ext := hasPrefix $u "http" -}}
+          {{- if not $ext }}{{ $u = $u | relURL }}{{ end -}}
+        <a class="gm-btn gm-btn-primary" href="{{ $u }}"{{ if $ext }} target="_blank" rel="noopener"{{ end }}>{{ .name }}</a>
+        {{- end }}
+        {{- with .Params.dataverse_url }}
+        <a class="gm-btn gm-btn-primary" href="{{ . }}" target="_blank" rel="noopener">{{ i18n "link_dataverse" }}</a>
+        {{- end }}
+      </div>
+      {{- end }}
+    </header>
+    {{- with $featured }}
+    <figure class="gm-pub-figure">
+      {{ $img := . }}
+      <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $.Title }}" loading="lazy">
+      {{ with $.Params.image_credit }}<figcaption>{{ . }}</figcaption>{{ end }}
+    </figure>
+    {{- end }}
+    {{- with .Params.abstract }}
+    <section id="abstract" class="gm-abstract">
+      <h2>{{ i18n "abstract" }}</h2>
+      <p>{{ . | markdownify }}</p>
+    </section>
+    {{- end }}
+    {{- with .Content }}<div class="prose gm-prose">{{ . }}</div>{{ end }}
+    {{- with .Params.tags }}
+    <p class="gm-tags">{{ range $i, $t := . }}{{ if $i }} · {{ end }}<a href="{{ (site.GetPage "publication").RelPermalink }}#q={{ $t | urlize }}">{{ $t }}</a>{{ end }}</p>
+    {{- end }}
+    {{ partial "related_finder.html" . }}
+  </article>
+</div>
+{{ end }}

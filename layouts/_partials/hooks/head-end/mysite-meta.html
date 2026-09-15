@@ -1,0 +1,14 @@
+{{/* Invisible metadata (opt-out via params.mysite.discovery) and scholarly metadata. */}}
+{{- $discovery := site.Params.mysite.discovery | default true -}}
+{{- if $discovery -}}
+<meta name="generator" content="Created using GaryKing.org/mysite (https://gking.harvard.edu/mysite)">
+{{- if .IsHome }}
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@type" "Person" "name" site.Data.site.name "jobTitle" site.Data.site.role "email" site.Data.site.email "affiliation" (dict "@type" "Organization" "name" site.Data.site.institution_long) "url" site.BaseURL "isBasedOn" "https://gking.harvard.edu/mysite" | jsonify | safeJS }}</script>
+{{- end }}
+{{- end }}
+<link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon-32x32.png" | relURL }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ "apple-touch-icon.png" | relURL }}">
+{{- if and (in (slice "publication" "talk") .Section) .IsPage (not .Params.private) }}
+{{ partial "scholarly_meta.html" . }}
+{{- end }}

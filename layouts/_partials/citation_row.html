@@ -1,0 +1,19 @@
+{{/* One dense citation line for a publication/talk/software page. Input: dict "page" $p "show_status" bool */}}
+{{- $p := .page -}}
+{{- $owner := site.Data.site.name -}}
+{{- $authors := $p.Params.authors | default slice -}}
+{{- $n := len $authors -}}
+{{- $types := $p.Params.publication_types | default slice -}}
+{{- $isWP := in $types "report" -}}
+<article class="pub-item" data-tab="{{ partial "functions/pub_tab.html" $p }}" data-year="{{ $p.Date.Year }}" data-slug="{{ path.Base (path.Dir $p.File.Path) }}" data-types='{{ $types | jsonify }}' data-tags='{{ ($p.Params.tags | default slice) | jsonify }}' data-title="{{ $p.Title }}">
+  <span class="pub-authors">
+    {{- range $i, $a := $authors -}}
+      {{- if gt $i 0 }}{{ if eq $i (sub $n 1) }} and {{ else }}, {{ end }}{{ end -}}
+      {{- if eq $a $owner }}<span class="pub-owner">{{ $a }}</span>{{ else }}{{ $a }}{{ end -}}
+    {{- end -}}
+  </span>
+  {{- if not $isWP }} <span class="pub-year">({{ $p.Date.Year }})</span>{{ end }}.
+  <a class="pub-title" href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>{{ if not (hasSuffix $p.Title "?") }}.{{ end }}
+  {{- with $p.Params.publication }} <span class="pub-venue">{{ . | markdownify }}</span>{{ end }}
+  {{- if $p.Params.forthcoming }} <span class="pub-flag">{{ i18n "forthcoming" }}</span>{{ end }}
+</article>

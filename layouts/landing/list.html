@@ -1,0 +1,57 @@
+{{ define "main" }}
+{{- $s := site.Data.site -}}
+{{- $photo := resources.Get "media/portrait.jpg" | default (resources.Get "media/portrait.png") -}}
+{{- $pubs := where site.RegularPages "Section" "in" (slice "publication" "talk" "software") -}}
+{{- $pubs = (where $pubs "Params.private" "!=" true).ByDate.Reverse -}}
+{{- $writings := site.GetPage "publication" -}}
+<div class="gm-container">
+  <section class="gm-hero">
+    <div class="gm-hero-photo">
+      {{- with $photo }}
+        {{- $img := .Fill "400x400 Center q90" -}}
+        <img src="{{ $img.RelPermalink }}" width="200" height="200" alt="Portrait of {{ $s.name }}, {{ $s.institution }}" fetchpriority="high">
+      {{- else }}
+        <div class="gm-monogram" role="img" aria-label="{{ $s.name }}"><span>{{ $s.initials }}</span></div>
+      {{- end }}
+    </div>
+    <div class="gm-hero-text">
+      <h1>{{ $s.name }}</h1>
+      <p class="gm-hero-role">{{ $s.role }}<br><span class="gm-hero-inst">{{ $s.institution_long }}</span></p>
+      <p class="gm-hero-intro">{{ $s.intro }}</p>
+      <div class="gm-hero-actions">
+        <a class="gm-btn gm-btn-primary" href="{{ (site.GetPage "bio").RelPermalink }}">{{ i18n "bio_cv" }}</a>
+        <a class="gm-btn gm-btn-primary" href="{{ $writings.RelPermalink }}">{{ $writings.Title }}</a>
+        <a class="gm-btn gm-btn-primary" href="{{ (site.GetPage "contact").RelPermalink }}">Contact</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="gm-areas" id="research-areas" aria-labelledby="research-areas-heading">
+    <h2 id="research-areas-heading">{{ i18n "research_areas" }}</h2>
+    {{- range $area := site.Data.research_areas.areas -}}
+      {{- $tags := slice }}{{ range $area.tags }}{{ $tags = $tags | append (lower .) }}{{ end -}}
+      {{- $matched := slice -}}
+      {{- range $pubs -}}
+        {{- $hit := false -}}
+        {{- range (.Params.tags | default slice) }}{{ if in $tags (lower .) }}{{ $hit = true }}{{ end }}{{ end -}}
+        {{- if $hit }}{{ $matched = $matched | append . }}{{ end -}}
+      {{- end -}}
+    <details class="gm-area">
+      <summary>
+        <span class="gm-area-name">{{ $area.name }}</span>
+        <span class="gm-area-count">{{ len $matched }}</span>
+      </summary>
+      <div class="gm-area-body">
+        <p class="gm-area-desc">{{ $area.description }}</p>
+        <div class="pub-list pub-list-compact">
+          {{- range first 4 $matched }}
+          {{ partial "citation_row.html" (dict "page" .) }}
+          {{- end }}
+        </div>
+        <p class="gm-area-more"><a class="gm-btn gm-btn-primary" href="{{ $writings.RelPermalink }}#area={{ $area.id }}">{{ i18n "view_all" }} ({{ len $matched }}) →</a></p>
+      </div>
+    </details>
+    {{- end }}
+  </section>
+</div>
+{{ end }}

@@ -1,0 +1,11 @@
+{{ define "main" }}
+<div class="gm-container gm-narrow" data-pagefind-ignore>
+  <article class="gm-page">
+    <header class="gm-page-head"><h1>{{ i18n "not_found_title" }}</h1></header>
+    <div class="prose gm-prose">
+      <p>{{ i18n "not_found_text" }}</p>
+      <p><button type="button" class="gm-btn gm-btn-primary" data-search-toggle>{{ i18n "search" }}</button> <a class="gm-btn gm-btn-primary" href="{{ site.Home.RelPermalink }}">{{ i18n "nav_home" }}</a></p>
+    </div>
+  </article>
+</div>
+{{ end }}

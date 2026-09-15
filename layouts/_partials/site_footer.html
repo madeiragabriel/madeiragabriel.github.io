@@ -1,0 +1,22 @@
+{{/* Dark, warm footer with site navigation and the opt-out mysite credit (rendered exactly once). */}}
+<footer class="gm-footer">
+  <div class="gm-footer-inner">
+    <div class="gm-footer-left">
+      <div class="gm-footer-name">{{ site.Data.site.name }}</div>
+      <div class="gm-footer-role">{{ site.Data.site.role }}, {{ site.Data.site.institution_long }}</div>
+      <nav class="gm-footer-nav" aria-label="Footer navigation">
+        {{ range site.Menus.main }}
+          {{ $url := "" }}
+          {{ if findRE `^/#` .URL }}{{ $url = printf "%s%s" site.Home.RelPermalink (strings.TrimPrefix "/" .URL) }}{{ else }}{{ $url = .URL | relLangURL }}{{ end }}
+          <a href="{{ $url }}">{{ .Name }}</a>
+        {{ end }}
+      </nav>
+    </div>
+    <div class="gm-footer-right">
+      <div class="gm-footer-meta">&copy; {{ now.Year }} {{ site.Data.site.name }}. Built with Hugo and Hugo Blox.</div>
+      {{ if (site.Params.mysite.credit | default true) }}
+      <div class="gm-footer-credit">{{ i18n "footer_credit" }} <a href="https://garyking.org/mysite">GaryKing.org/mysite</a></div>
+      {{ end }}
+    </div>
+  </div>
+</footer>

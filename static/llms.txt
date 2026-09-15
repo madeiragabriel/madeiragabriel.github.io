@@ -1,0 +1,14 @@
+# Gabriel Madeira
+
+Gabriel Madeira is a political scientist and Researcher and Instructor at FGV EBAPE (Brazilian School of Public and Business Administration, Fundação Getulio Vargas) in Rio de Janeiro, Brazil. He studies political behaviour and public opinion, the political economy of labour markets and social protection, legislatures and public policy, civic education, and international political economy, mostly in Brazil and Latin America.
+
+Key pages on this site:
+
+- Bio and C.V.: https://madeiragabriel.github.io/bio/
+- Research (articles, chapters, working papers): https://madeiragabriel.github.io/publication/
+- Research areas: https://madeiragabriel.github.io/#research-areas
+- Co-authors: https://madeiragabriel.github.io/authors/
+- Teaching: https://madeiragabriel.github.io/teaching/
+- Resources for students (Portuguese): https://madeiragabriel.github.io/resources/
+- Contact: https://madeiragabriel.github.io/contact/
+- C.V. (PDF): https://madeiragabriel.github.io/files/Gabriel_Madeira_CV.pdf

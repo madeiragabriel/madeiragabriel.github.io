@@ -1,0 +1,52 @@
+# Centralized labels. Change wording here, not in templates.
+nav_home: { other: "Home" }
+skip_to_content: { other: "Skip to content" }
+search: { other: "Search" }
+search_placeholder: { other: "Search this site…" }
+search_fallback: { other: "Search this site on Google" }
+research_areas: { other: "Research Areas" }
+view_all: { other: "View all" }
+download_cv: { other: "Download C.V. (PDF)" }
+bio_cv: { other: "Bio & C.V." }
+tab_all: { other: "All" }
+tab_articles: { other: "Articles" }
+tab_chapters: { other: "Book Chapters" }
+tab_working_papers: { other: "Working Papers" }
+tab_in_progress: { other: "In Progress" }
+tab_presentations: { other: "Presentations" }
+tab_software: { other: "Software" }
+tab_data: { other: "Datasets" }
+filter_search: { other: "Filter by keyword" }
+filter_area: { other: "Research area" }
+filter_area_all: { other: "All research areas" }
+filter_year: { other: "Year" }
+filter_reset: { other: "Reset filters" }
+sort_label: { other: "Sort" }
+sort_newest: { other: "Newest first" }
+sort_oldest: { other: "Oldest first" }
+sort_title_az: { other: "Title A–Z" }
+sort_title_za: { other: "Title Z–A" }
+results_of: { other: "of" }
+results: { other: "results" }
+download_citations: { other: "Download citations (BibTeX)" }
+abstract: { other: "Abstract" }
+see_also: { other: "See also" }
+kind_paper: { other: "Paper" }
+kind_chapter: { other: "Chapter" }
+kind_book: { other: "Book" }
+kind_presentation: { other: "Presentation" }
+kind_software: { other: "Software" }
+kind_dataset: { other: "Dataset" }
+kind_patent: { other: "Patent" }
+kind_court_brief: { other: "Court Brief" }
+kind_working_paper: { other: "Working Paper" }
+link_article: { other: "Article (PDF)" }
+link_publisher: { other: "Publisher's Version" }
+link_dataverse: { other: "Replication data on Harvard Dataverse" }
+replication_data_for: { other: "Replication data for" }
+forthcoming: { other: "Forthcoming" }
+people_intro: { other: "Most of Gabriel's research is collaborative. These are his co-authors." }
+footer_credit: { other: "Created using" }
+not_found_title: { other: "Page not found" }
+not_found_text: { other: "The page you were looking for does not exist or has moved. Try searching, or start again from the homepage." }
+published_with: { other: "Made with {hugoblox}." }

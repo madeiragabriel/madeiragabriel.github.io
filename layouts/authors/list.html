@@ -1,0 +1,26 @@
+{{ define "main" }}
+{{- $owner := site.Data.site.name -}}
+{{- $links := site.Data.coauthors -}}
+{{- $names := slice -}}
+{{- range where site.RegularPages "Section" "in" (slice "publication" "talk" "software") -}}
+  {{- range (.Params.authors | default slice) }}{{ if ne . $owner }}{{ $names = $names | append . }}{{ end }}{{ end -}}
+{{- end -}}
+{{- $names = sort ($names | uniq) -}}
+{{/* Sort by last name for a proper alphabetical list */}}
+{{- $keyed := slice -}}
+{{- range $names }}{{ $parts := split . " " }}{{ $keyed = $keyed | append (dict "name" . "key" (printf "%s %s" (index $parts (sub (len $parts) 1)) .)) }}{{ end -}}
+<div class="gm-container gm-narrow">
+  <nav class="gm-breadcrumb" data-pagefind-ignore aria-label="Breadcrumb"><a href="{{ site.Home.RelPermalink }}">{{ i18n "nav_home" }}</a> <span aria-hidden="true">/</span> <span aria-current="page">{{ .Title }}</span></nav>
+  <header class="gm-page-head">
+    <h1>{{ .Title }}</h1>
+    <p class="gm-lede">{{ i18n "people_intro" }}</p>
+    {{ .Content }}
+  </header>
+  <ul class="gm-people">
+    {{- range sort $keyed "key" }}
+      {{- $entry := index $links .name -}}
+    <li>{{ with $entry }}<a href="{{ .url }}" target="_blank" rel="noopener">{{ end }}{{ .name }}{{ if $entry }}</a>{{ else }}<!-- no verified page found for {{ .name }}; add one in data/coauthors.json -->{{ end }}</li>
+    {{- end }}
+  </ul>
+</div>
+{{ end }}
